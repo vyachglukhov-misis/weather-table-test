@@ -1,3 +1,4 @@
+import styles from "./index.module.scss";
 import React from "react";
 
 interface Props {
@@ -5,5 +6,5 @@ interface Props {
 }
 
 export const PressureValueCell = ({ pressureValue }: Props) => {
-  return <div>{pressureValue}</div>;
+  return <div className={styles.pressure}>{pressureValue}</div>;
 };

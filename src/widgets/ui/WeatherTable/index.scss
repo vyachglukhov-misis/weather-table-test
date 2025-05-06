@@ -1,0 +1,27 @@
+td,
+th {
+  padding: 0px 2px !important;
+}
+.ant-table-wrapper table {
+  width: auto;
+}
+
+/* Добавляем вертикальные границы */
+.ant-table-cell {
+  border-right: 1px solid #f0f0f0;
+}
+
+/* Убираем последнюю правую границу */
+.ant-table-cell:last-child {
+  border-right: none;
+}
+
+.ant-table-tbody > tr > td,
+.ant-table-thead > tr > th {
+  border-bottom: none !important;
+  text-align: center !important;
+}
+
+.ant-table-thead > tr > th {
+  background-color: white !important;
+}
