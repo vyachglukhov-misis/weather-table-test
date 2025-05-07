@@ -1,12 +1,12 @@
 export enum WeatherIconName {
-  ClearDay = "clear-day",
-  ClearNight = "clear-night",
+  ClearDay = "clear",
+  ClearNight = "twilight",
   Cloudy = "cloudy",
   Rain = "rain",
   SnowAndRain = "snow-and-rain",
   Snow = "snow",
   Thunder = "thunder",
-  DayPartlyCloudy = "day-partly-cloudy",
+  DayPartlyCloudy = "clTwilight",
   NightPartlyCloudy = "night-partly-cloudy",
 }
 

@@ -1,4 +1,4 @@
-import { ReactComponent as ArrowIcon } from "../../assets/icons/windDirections/north-arrow.svg";
+import { ReactComponent as ArrowIcon } from "../../../assets/icons/windDirections/north-arrow.svg";
 import React from "react";
 
 interface Props {

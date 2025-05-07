@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
@@ -11,55 +11,77 @@ import {
   WindDirectionArrowCell,
   WindMaxSpeedCell,
   WindSpeedCell,
-} from "../../../entities/weather/ui/cells";
+} from "../../../entities/weather/ui/cells/body";
 import { WeatherIconName } from "../../../entities/weather/model/weather-icon";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DraggableTableColumn } from "../../../shared/ui/draggable-table-column.tsx/draggable-table-column";
 
 import "./index.scss";
-import { TimeAtClockHeaderCell } from "../../../entities/weather/ui/cells/header/TimeAtClockHeaderCell/TimeAtClockHeaderCell";
-import { RainValueHeaderCell } from "../../../entities/weather/ui/cells/header/RainValueHeaderCell/RainValueHeaderCell";
-import { TemperatureHeaderCell } from "../../../entities/weather/ui/cells/header/TemperatureHeaderCell/TemperatureHeaderCell";
-import { WindSpeedHeaderCell } from "../../../entities/weather/ui/cells/header/WindSpeedHeaderCell/WindSpeedHeaderCell";
-import { WindMaxSpeedHeaderCell } from "../../../entities/weather/ui/cells/header/WindMaxSpeedHeaderCell/WindMaxSpeedHeaderCell";
-import { WindDirectionHeaderCell } from "../../../entities/weather/ui/cells/header/WindDirectionHeaderCell/WindDirectionHeaderCell";
-import { PressureHeaderCell } from "../../../entities/weather/ui/cells/header/PressureHeaderCell/PressureHeaderCell";
+import { TWeatherRequest } from "../../../api/weather/weather.repository";
+import {
+  PressureHeaderCell,
+  RainValueHeaderCell,
+  TemperatureHeaderCell,
+  TimeAtClockHeaderCell,
+  WindDirectionHeaderCell,
+  WindMaxSpeedHeaderCell,
+  WindSpeedHeaderCell,
+} from "../../../entities/weather/ui/cells/header";
 import { WeatherIconCell } from "../../../entities/weather/ui/cells/body/WeatherIconCell/WeatherIconCell";
+import { WeatherService } from "../../../api/weather/weather.service";
+
+const weatherService = new WeatherService();
 
 type Props = {
   data: WeatherTableRow[];
 };
 
 export const WeatherTable = ({ data }: Props) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const request: TWeatherRequest = {
+          cord: [37.6173, 55.7558],
+          level: ["150m"],
+          param: ["wind", "temp", "cloud", "pressure", "gust", "prec"],
+          day: 14,
+          step: 3,
+          model: "gfs",
+        };
+
+        const result = await weatherService.getWeatherInfo(request);
+      } catch (e) {
+        console.error("WeatherApiResult:", e);
+      }
+    };
+    fetchData();
+  }, []);
+
   const [columns, setColumns] = useState<ColumnsType<WeatherTableRow>>([
     {
       title: <TimeAtClockHeaderCell />,
       dataIndex: "timeAtClock",
       key: "timeAtClock",
       render: (date: Date) => <TimeAtClockCell date={date} />,
-      width: "max-content",
     },
     {
       title: <RainValueHeaderCell />,
       dataIndex: "precipationValue",
       key: "precipationValue",
       render: (mm: number) => <RainValueCell rainValue={mm} />,
-      width: "max-content",
     },
     {
       title: "",
       dataIndex: "weatherIcon",
       key: "weatherIcon",
       render: (icon: WeatherIconName) => <WeatherIconCell weatherName={icon} />,
-      width: "max-content",
     },
     {
       title: <TemperatureHeaderCell />,
       dataIndex: "temperature",
       key: "temperature",
       render: (temp: number) => <TemperatureCell temperatureValue={temp} />,
-      width: "max-content",
     },
     {
       title: <WindSpeedHeaderCell />,
