@@ -29,35 +29,16 @@ import {
   WindSpeedHeaderCell,
 } from "../../../entities/weather/ui/cells/header";
 import { WeatherIconCell } from "../../../entities/weather/ui/cells/body/WeatherIconCell/WeatherIconCell";
-import { WeatherService } from "../../../api/weather/weather.service";
-
-const weatherService = new WeatherService();
+import {
+  WeatherService,
+  WeatherTableInfo,
+} from "../../../api/weather/weather.service";
 
 type Props = {
-  data: WeatherTableRow[];
+  data: WeatherTableInfo[];
 };
 
 export const WeatherTable = ({ data }: Props) => {
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const request: TWeatherRequest = {
-          cord: [37.6173, 55.7558],
-          level: ["150m"],
-          param: ["wind", "temp", "cloud", "pressure", "gust", "prec"],
-          day: 14,
-          step: 3,
-          model: "gfs",
-        };
-
-        const result = await weatherService.getWeatherInfo(request);
-      } catch (e) {
-        console.error("WeatherApiResult:", e);
-      }
-    };
-    fetchData();
-  }, []);
-
   const [columns, setColumns] = useState<ColumnsType<WeatherTableRow>>([
     {
       title: <TimeAtClockHeaderCell />,
@@ -88,7 +69,6 @@ export const WeatherTable = ({ data }: Props) => {
       dataIndex: "windSpeedValue",
       key: "windSpeedValue",
       render: (speed: number) => <WindSpeedCell windValue={speed} />,
-      width: "max-content",
     },
     {
       title: <WindMaxSpeedHeaderCell />,
@@ -140,14 +120,18 @@ export const WeatherTable = ({ data }: Props) => {
   }));
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Table<WeatherTableRow>
-        style={{ tableLayout: "fixed" }}
-        columns={colsWithIndex}
-        dataSource={data}
-        components={components}
-        pagination={false}
-      />
-    </DndProvider>
+    <>
+      {data.map((table) => (
+        <DndProvider backend={HTML5Backend}>
+          <Table<WeatherTableRow>
+            style={{ tableLayout: "fixed" }}
+            columns={colsWithIndex}
+            dataSource={table.tableData}
+            components={components}
+            pagination={false}
+          />
+        </DndProvider>
+      ))}
+    </>
   );
 };

@@ -8,7 +8,7 @@ import {
   WeatherRepository,
 } from "./weather.repository";
 
-type WeatherTableInfo = {
+export type WeatherTableInfo = {
   date: Date;
   model: WeatherModel;
   sunrise: Date;

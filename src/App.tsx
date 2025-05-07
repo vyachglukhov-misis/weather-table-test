@@ -3,6 +3,13 @@ import "./App.css";
 import { WeatherTable } from "./widgets/ui/WeatherTable/WeatherTable";
 import { WeatherTableRow } from "./entities/weather/model/WeatherTableRow";
 import { WeatherIconName } from "./entities/weather/model/weather-icon";
+import { useFetchWeatherHook } from "./features/weather/hooks/useFetchWeatherHook";
+import { WeatherService } from "./api/weather/weather.service";
+import {
+  SURFACE_LEVEL,
+  WeatherModel,
+  WeatherParam,
+} from "./api/weather/weather.repository";
 
 const data: WeatherTableRow[] = [
   {
@@ -38,6 +45,26 @@ const data: WeatherTableRow[] = [
 ];
 
 function App() {
+  const weatherService = new WeatherService();
+  const weatherRequest = {
+    cord: [37.6173, 55.7558],
+    level: ["100m"] as SURFACE_LEVEL[],
+    param: [
+      "wind",
+      "temp",
+      "cloud",
+      "pressure",
+      "gust",
+      "prec",
+    ] as WeatherParam[],
+    day: 14,
+    step: 3,
+    model: "gfs" as WeatherModel,
+  };
+  const { data, error, loading } = useFetchWeatherHook(
+    weatherRequest,
+    weatherService
+  );
   return (
     <div className="App">
       <WeatherTable data={data} />
